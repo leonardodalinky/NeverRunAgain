@@ -113,7 +113,7 @@ public class Main2ActivityFragment extends Fragment {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("*/*");//设置类型，我这里是任意类型，任意后缀的可以这样写。
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        startActivityForResult(intent, Common.ACCFILE_SELECTOR_CODE);
+        startActivityForResult(Intent.createChooser(intent, "Choose"), Common.ACCFILE_SELECTOR_CODE);
     }
 
     private void SaveToConfig(){

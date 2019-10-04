@@ -53,7 +53,7 @@ public class Common {
                 file.createNewFile();
 
                 FileOutputStream outputStream = new FileOutputStream(file);
-                String str = "{\"enabled\":false,\"filepath\":}";
+                String str = "{\"enabled\":false,\"filepath\":\"\"}";
                 outputStream.write(str.getBytes());
             }
         }

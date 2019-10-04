@@ -80,12 +80,13 @@ public class Main2Activity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("", data.getData().getPath());
-        if (requestCode == Common.ACCFILE_SELECTOR_CODE && resultCode == Activity.RESULT_OK) {
+        if ((requestCode == Common.ACCFILE_SELECTOR_CODE || requestCode == Common.ACCFILE_SELECTOR_CODE + 65536) &&
+                resultCode == Activity.RESULT_OK) {
             Uri uri = data.getData();
             OnMain2Click(uri.getPath());
         }
-        else if (requestCode == Common.ACCSTOREFOLDER_SELECTOR_CODE && resultCode == Activity.RESULT_OK){
+        else if ((requestCode == Common.ACCSTOREFOLDER_SELECTOR_CODE || requestCode == Common.ACCSTOREFOLDER_SELECTOR_CODE + 65536)
+                && resultCode == Activity.RESULT_OK){
             Uri uri = data.getData();
             OnStoreFileClick(uri.getPath());
         }

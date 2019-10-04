@@ -81,14 +81,12 @@ public class RecordFragment extends Fragment {
 
         mAccRecorder = new AccRecorder(v.getContext());
 
-        /*
         accFileLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 OpenFolderSelector();
             }
         });
-         */
 
         buttonRecord.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,9 +120,9 @@ public class RecordFragment extends Fragment {
                     "Your Android Version didn't support to change the folder.", Toast.LENGTH_LONG).show();
             return;
         }
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_DEFAULT);
-        startActivityForResult(intent, Common.ACCSTOREFOLDER_SELECTOR_CODE);
+        startActivityForResult(Intent.createChooser(intent, "Choose Application to Set Storing Folder"), Common.ACCSTOREFOLDER_SELECTOR_CODE);
     }
 // end of RecordFragment.class
 }
