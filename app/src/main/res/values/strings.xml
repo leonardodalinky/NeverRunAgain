@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">RunSimulator</string>
+    <string name="title_activity_main2">NeverRunAgain</string>
+    <string name="setting_text">文本设置</string>
+    <string name="category_file">Acc文件位置</string>
+    <string name="text_file_default">无</string>
+    <string name="category_switch">开关状态</string>
+    <string name="text_on">启用状态</string>
+    <string name="category_recordfile">Acc文件存储位置</string>
+    <string name="button_start_record">开始录制</string>
+    <string name="button_stop_record">停止录制</string>
+    <string name="action_main">主界面</string>
+    <string name="action_record">Acc录制</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:id="@+id/TextSetting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/文本设置"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/setting_text"
+            android:textColor="@color/colorAccent"
+            android:textSize="30sp" />
+
+        <LinearLayout
+            android:id="@+id/AccFileLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="auto"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/categoryFile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/category_file"
+                android:textColor="@android:color/black"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/textFile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="20dp"
+                android:paddingLeft="20dp"
+                android:paddingEnd="0dp"
+                android:paddingRight="0dp"
+                android:text="@string/text_file_default"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/SwitchLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/TextSetting"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/categorySwitch"
+            android:layout_width="289dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/category_switch"
+            android:textColor="@color/colorAccent"
+            android:textSize="30sp" />
+
+        <Switch
+            android:id="@+id/switchOn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/text_on"
+            android:textSize="24sp"
+            />
+
+    </LinearLayout>
+</RelativeLayout>
