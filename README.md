@@ -12,6 +12,10 @@
 &emsp;&emsp;见参考文档：[Xposed Framework搭建](https://github.com/leonardodalinky/NeverRunAgain/wiki/1.Xposed-Framwork%E6%90%AD%E5%BB%BA)  
 ## 插件使用说明
 &emsp;&emsp;见参考文档：[RunSimulator的安装与使用](https://github.com/leonardodalinky/NeverRunAgain/wiki/2.RunSimulator%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8)  
+## 运行截图
+<img src="https://github.com/leonardodalinky/NeverRunAgain/blob/master/raw/images/3.png" height="500"></img>
+<img src="https://github.com/leonardodalinky/NeverRunAgain/blob/master/raw/images/4.png" height="500"></img>
+<img src="https://github.com/leonardodalinky/NeverRunAgain/blob/master/raw/images/5.png" height="500"></img>  
 ## 联系方式
 &emsp;&emsp;作者邮箱：[493987054@qq.com](mailto:493987054@qq.com)  
 &emsp;&emsp;欢迎提交Issue来改进这款插件。
