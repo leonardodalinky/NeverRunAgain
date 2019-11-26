@@ -1,7 +1,7 @@
 package cf.ayajilin.runsimulator.hooker;
 
 import cf.ayajilin.runsimulator.hooker.Interface.IHooker;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import de.robv.android.xposed.SELinuxHelper;
 
 import android.location.Criteria;
 import android.location.GpsStatus;
@@ -10,43 +10,79 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.telephony.TelephonyManager;
-import android.util.ArrayMap;
 
-import java.lang.reflect.Field;
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.ArrayList;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.Iterator;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
+import de.robv.android.xposed.services.BaseService;
+import cf.ayajilin.runsimulator.File.GPSPlayer;
 
 public class GpsHooker implements IHooker {
-    public static double startLatitude = 40.009650;
-    public static double startLongtitude = 116.33338;
+    public static final double startLatitude = 40.009650;
+    public static final double startLongtitude = 116.33338;
     // 每米对应的经纬度
-    public static double LtitudePerMeter = 9.01e-06;
+    public static final double LtitudePerMeter = 9.01e-06;
     // 以m/s为单位
-    public static double speed = 3.0;
+    public static final double speed = 3.0;
 
-    private static long startTime = (new Date()).getTime();
+    private static final double speedNoiseLevel = 0.3;
+
+    private GPSPlayer gpsPlayer;
+
+    private long startTime = (new Date()).getTime();
 
     public long GetStartTime() {
         return startTime;
     }
 
-    // TODO:加入用户ui，自行选择地图
-    public static double GetNowLongtitude() {
-        Date date = new Date();
-        //return startLongtitude + (date.getTime() - startTime) / 1000.0 * speed * LtitudePerMeter;
-        return startLongtitude + Math.sin((date.getTime() - startTime) / 1000.0) * speed * LtitudePerMeter;
+    public GpsHooker(String filePath) throws FileNotFoundException, JSONException {
+        BaseService baseService = SELinuxHelper.getAppDataFileService();
+        if (!baseService.checkFileExists(filePath)){
+            throw new FileNotFoundException("Cannot find the config.json!");
+        }
+
+        InputStream inputStream;
+        JSONArray jsonArray = null;
+        try{
+            inputStream = baseService.getFileInputStream(filePath);
+            byte[] bytes = new byte[inputStream.available()];
+            inputStream.read(bytes);
+            jsonArray = new JSONArray(new String(bytes));
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+        gpsPlayer = new GPSPlayer(jsonArray, 0.1, 0.1);
+
     }
 
-    public static double GetNowLatitude() {
-        Date date = new Date();
-        return startLatitude + 0.8f * (date.getTime() - startTime) / 1000.0 * speed * LtitudePerMeter;
+    // TODO:加入用户ui，自行选择地图
+    public double GetNowLongitude() {
+        return gpsPlayer.getLocation().longitude;
+        //Date date = new Date();
+        //return startLongtitude + (date.getTime() - startTime) / 1000.0 * speed * LtitudePerMeter;
+        //return startLongtitude + Math.sin((date.getTime() - startTime) / 1000.0) * speed * LtitudePerMeter;
+    }
+
+    public double GetNowLatitude() {
+        return gpsPlayer.getLocation().latitude;
+        //Date date = new Date();
+        //return startLatitude + 0.8f * (date.getTime() - startTime) / 1000.0 * speed * LtitudePerMeter;
+    }
+
+    public double GetNowAltitude() {
+        return gpsPlayer.getLocation().altitude;
     }
 
     private LocationManager locationManager = null;
@@ -57,6 +93,7 @@ public class GpsHooker implements IHooker {
         // 设置开始时间
         Date date = new Date();
         startTime = date.getTime();
+        gpsPlayer.begin();
 
         // 基站信息设置为Null
         XposedHelpers.findAndHookMethod("android.telephony.TelephonyManager", classLoader,
@@ -236,8 +273,9 @@ public class GpsHooker implements IHooker {
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable{
                         Location l = new Location(LocationManager.GPS_PROVIDER);
                         l.setLatitude(GetNowLatitude());
-                        l.setLongitude(GetNowLongtitude());
-                        l.setAltitude(50.0f);
+                        l.setLongitude(GetNowLongitude());
+                        l.setAltitude(GetNowAltitude());
+                        //l.setAltitude(50.0f);
                         l.setAccuracy(10.00f);
                         l.setSpeed(3.2f);
                         l.setTime((new Date()).getTime());
@@ -287,7 +325,7 @@ public class GpsHooker implements IHooker {
                             }
                             Location l = new Location(LocationManager.GPS_PROVIDER);
                             l.setLatitude(GetNowLatitude());
-                            l.setLongitude(GetNowLongtitude());
+                            l.setLongitude(GetNowLongitude());
                             l.setAltitude(50.0f);
                             l.setAccuracy(10.00f);
                             l.setSpeed(3.2f);
@@ -334,7 +372,7 @@ public class GpsHooker implements IHooker {
                                 if (m != null) {
                                     Location l = new Location(LocationManager.GPS_PROVIDER);
                                     l.setLatitude(GetNowLatitude());
-                                    l.setLongitude(GetNowLongtitude());
+                                    l.setLongitude(GetNowLongitude());
                                     l.setAccuracy(100f);
                                     l.setTime(0);
                                     m.invoke(ll, l);
@@ -360,7 +398,8 @@ public class GpsHooker implements IHooker {
                         if (locationManager != null){
                             Location l = new Location(LocationManager.GPS_PROVIDER);
                             l.setLatitude(GetNowLatitude());
-                            l.setLongitude(GetNowLongtitude());
+                            l.setLongitude(GetNowLongitude());
+                            l.setAltitude(GetNowAltitude());
                             l.setAltitude(50.0f);
                             l.setAccuracy(10.00f);
                             l.setSpeed(3.2f);

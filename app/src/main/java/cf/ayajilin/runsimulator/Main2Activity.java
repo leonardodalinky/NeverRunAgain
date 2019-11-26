@@ -80,12 +80,15 @@ public class Main2Activity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if ((requestCode == Common.ACCFILE_SELECTOR_CODE || requestCode == Common.ACCFILE_SELECTOR_CODE + 65536) &&
+        if ((requestCode & 0xffff) == Common.ACCFILE_SELECTOR_CODE &&
                 resultCode == Activity.RESULT_OK) {
             Uri uri = data.getData();
             OnMain2Click(uri.getPath());
-        }
-        else if ((requestCode == Common.ACCSTOREFOLDER_SELECTOR_CODE || requestCode == Common.ACCSTOREFOLDER_SELECTOR_CODE + 65536)
+        } else if ((requestCode & 0xffff) == Common.GPSFILE_SELECTOR_CODE
+                && resultCode == Activity.RESULT_OK) {
+            Uri uri = data.getData();
+            OnGPSFileSelectorClick(uri.getPath());
+        } else if ((requestCode & 0xffff) == Common.ACCSTOREFOLDER_SELECTOR_CODE
                 && resultCode == Activity.RESULT_OK){
             Uri uri = data.getData();
             OnStoreFileClick(uri.getPath());
@@ -98,6 +101,13 @@ public class Main2Activity extends AppCompatActivity
             main2ActivityFragment = new Main2ActivityFragment();
 
         main2ActivityFragment.SetFilePath(filepath);
+    }
+
+    public void OnGPSFileSelectorClick(String filepath) {
+        if (main2ActivityFragment == null)
+            main2ActivityFragment = new Main2ActivityFragment();
+
+        main2ActivityFragment.SetGPSFilePath(filepath);
     }
 
     @Override

@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import org.json.JSONObject;
 
+import java.util.Arrays;
+
 import cf.ayajilin.runsimulator.File.Common;
 import cf.ayajilin.runsimulator.R;
 
@@ -25,11 +27,14 @@ import cf.ayajilin.runsimulator.R;
 public class Main2ActivityFragment extends Fragment {
     private View selfView;
     private boolean isOn;
-    private String filePath;
+    private String accFilePath;
+    private String gpsFilePath;
 
     private TextView textFile;
+    private TextView gpsFile;
     private Switch switchOn;
     private LinearLayout accFileLayout;
+    private LinearLayout gpsFileLayout;
 
     public Main2ActivityFragment() {
     }
@@ -49,8 +54,10 @@ public class Main2ActivityFragment extends Fragment {
 
     private void Initialize(View v) {
         textFile = v.findViewById(R.id.textFile);
+        gpsFile = v.findViewById(R.id.gpsFile);
         switchOn = v.findViewById(R.id.switchOn);
         accFileLayout = v.findViewById(R.id.AccFileLayout);
+        gpsFileLayout = v.findViewById(R.id.GPSFileLayout);
 
         try{
             if (!Common.ExistConfig() || Common.ConfigEmpty()){
@@ -58,17 +65,22 @@ public class Main2ActivityFragment extends Fragment {
             }
 
             isOn = false;
-            filePath = "";
+            accFilePath = "";
+            gpsFilePath = "";
             JSONObject jsonConfig = Common.GetJson();
             if (jsonConfig.has("enabled")){
                 isOn = jsonConfig.getBoolean("enabled");
             }
             if (jsonConfig.has("filepath")){
-                filePath = jsonConfig.getString("filepath");
+                accFilePath = jsonConfig.getString("filepath");
+            }
+            if (jsonConfig.has("gps_file_path")){
+                gpsFilePath = jsonConfig.getString("gps_file_path");
             }
 
             switchOn.setChecked(isOn);
-            textFile.setText(filePath);
+            textFile.setText(accFilePath);
+            gpsFile.setText(gpsFilePath);
 
             // 开关的监听事件
             switchOn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -90,7 +102,14 @@ public class Main2ActivityFragment extends Fragment {
             accFileLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    OpenFileSelector();
+                    OpenAccFileSelector();
+                }
+            });
+
+            gpsFileLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    OpenGpsFileSelector();
                 }
             });
 
@@ -106,23 +125,40 @@ public class Main2ActivityFragment extends Fragment {
         if (textFile != null)
             textFile.setText(str);
 
-        filePath = str;
+        accFilePath = str;
+        SaveToConfig();
     }
 
-    private void OpenFileSelector() {
+    public void SetGPSFilePath(String str){
+        if (gpsFile != null)
+            gpsFile.setText(str);
+
+        gpsFilePath = str;
+        SaveToConfig();
+    }
+
+    private void OpenAccFileSelector() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("*/*");//设置类型，我这里是任意类型，任意后缀的可以这样写。
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         startActivityForResult(Intent.createChooser(intent, "Choose"), Common.ACCFILE_SELECTOR_CODE);
     }
 
+    private void OpenGpsFileSelector() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        startActivityForResult(Intent.createChooser(intent, "Choose"), Common.GPSFILE_SELECTOR_CODE);
+    }
+
     private void SaveToConfig(){
         try{
-            Common.Put("filepath", filePath);
+            Common.Put("filepath", accFilePath);
+            Common.Put("gps_file_path", gpsFilePath);
             Common.Put("enabled", isOn);
         }
         catch (Exception e){
-            Toast.makeText(selfView.getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(selfView.getContext(), Arrays.toString(e.getStackTrace()), Toast.LENGTH_LONG).show();
             e.printStackTrace();
             return;
         }
