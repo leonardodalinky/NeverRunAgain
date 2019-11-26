@@ -46,6 +46,33 @@
                 android:textSize="18sp" />
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/GPSFileLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="auto"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/gps_file_location"
+                android:textColor="@android:color/black"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/gpsFile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="20dp"
+                android:paddingLeft="20dp"
+                android:paddingEnd="0dp"
+                android:paddingRight="0dp"
+                android:text="@string/text_file_default"
+                android:textSize="18sp" />
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout

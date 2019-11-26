@@ -68,32 +68,8 @@ public class MovementHooker implements IHooker {
 
     private AccReader mAccReader;
 
-    public MovementHooker(String accFilePath)
-            throws FileNotFoundException, JSONException
-    {
-        BaseService baseService = SELinuxHelper.getAppDataFileService();
-        if (!baseService.checkFileExists(accFilePath)){
-            throw new FileNotFoundException("Cannot find the config.json!");
-        }
-
-        InputStream inputStream;
-        JSONObject jsonObject = null;
-        try{
-            inputStream = baseService.getFileInputStream(accFilePath);
-            byte[] bytes = new byte[inputStream.available()];
-            inputStream.read(bytes);
-            jsonObject = new JSONObject(new String(bytes));
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-
-        if (!jsonObject.has("filepath")){
-            throw new JSONException("Wrong Config Format!");
-        }
-        else{
-            mAccReader = new AccReader(jsonObject.getString("filepath"));
-        }
+    public MovementHooker(String accFilePath) {
+        mAccReader = new AccReader(accFilePath);
     }
 
     @Override
@@ -195,8 +171,8 @@ public class MovementHooker implements IHooker {
                                             for (int i = 0;i < 3;i++){
                                                 sensorEvent.values[i] = accs[i];
                                             }
-                                            XposedBridge.log("fir:" + accs[0] + ", sec:" +
-                                                    accs[1] + ", trd:" + accs[2]);
+                                            /*XposedBridge.log("fir:" + accs[0] + ", sec:" +
+                                                    accs[1] + ", trd:" + accs[2]);*/
                                         } catch (Exception ex) {
                                             // Nothing
                                         }
