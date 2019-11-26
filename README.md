@@ -7,6 +7,7 @@
 ## 环境说明
 &emsp;&emsp;系统环境：**Android 5.0 及以上，需取得root权限**  
 &emsp;&emsp;框架环境：**Xposed Framework 89（其他版本未测试，可自行尝试）**  
+&emsp;&emsp;开发环境：**Android Studio**
 &emsp;&emsp;_（电脑端可使用安卓模拟器，经测试<b>夜神模拟器(Nox)</b>可完美运行）_
 ## 环境安装说明
 &emsp;&emsp;见参考文档：[Xposed Framework搭建](https://github.com/leonardodalinky/NeverRunAgain/wiki/1.Xposed-Framwork%E6%90%AD%E5%BB%BA)  
